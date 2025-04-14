@@ -1,0 +1,101 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Airflow
+airflow/logs/
+airflow/plugins/
+airflow/*.pid
+airflow/webserver_config.py
+airflow.cfg
+airflow.db
+unittests.cfg
+logs/
+
+# Environment variables
+.env
+.venv
+env/
+venv/
+ENV/
+.env.local
+.env.*.local
+
+# AWS
+.aws/
+*.pem
+aws_credentials
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+.project
+.classpath
+.settings/
+*.sublime-workspace
+*.sublime-project
+
+# Spark
+metastore_db/
+derby.log
+*.log
+spark-warehouse/
+
+# Data files
+*.csv
+*.parquet
+*.snappy
+*.gz
+*.zip
+*.tar
+*.jar
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Terraform (if you add it later)
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraformrc
+terraform.rc
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Misc
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+.coverage.*
+coverage.xml
+*.cover
+*.log
+.hypothesis/
+
