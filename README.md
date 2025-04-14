@@ -15,6 +15,7 @@ This project demonstrates a batch processing pipeline for violence cases data in
   * [4. Create the Data Warehouse](#4-create-the-data-warehouse)
   * [5. Run Airflow](#5-run-airflow)
   * [6. Run the Airflow DAGs](#6-run-the-airflow-dags)
+  * [7. Visualize data](#7-visualize-the-data)
 - [Project Limitations](#project-limitations)
 
 ## Overview
@@ -30,7 +31,6 @@ The end goal is to process violence cases data on the AWS platform and derive us
 
 - What is the distribution of violence types across regions?
 - How do violence cases vary by gender and age groups?
-- What are the temporal patterns in reported cases?
 - Which regions have the highest reported cases?
 
 ## The Dataset
@@ -42,29 +42,31 @@ We process violence cases data that includes:
    - Demographic information (Gender, Age groups)
    - Temporal information (Year, Period)
 
-## Data Modeling
-We implement a **Star Schema** for our Data Warehouse with the following structure:
-
-![The ERD](/images/ViolenceCasesERD.png "Entity Relationship Diagram")
-
-The schema includes:
-- Fact table: reported cases with metrics
-- Dimension tables: dates, locations, centers, case types
-
 ## Tools
-1. **Terraform** (optional): Infrastructure as Code for AWS resources
+1. **Terraform**: Infrastructure as Code for AWS resources
 2. **Apache Airflow**: Workflow orchestration
 3. **AWS S3**: Data Lake storage
 4. **Apache Spark**: Data transformation
 5. **AWS EMR**: Managed Spark cluster
 6. **AWS Redshift**: Data Warehouse
-7. **Docker**: Containerization for local development
-
-## Scalability
-The pipeline is designed to handle increased data volume by:
-- Using EMR clusters for distributed processing
-- Storing data in columnar format (Parquet)
-- Leveraging Redshift's MPP architecture
+7. **AWS Quicksight**: Data Visualization
+8. **Docker**: Containerization for local development
+## Detailed stack
+* Cloud:
+    * platform: AWS (**Redshift** and **EMR**);
+    * IaC tool: **Terraform**.
+* Data ingestion (chosse either batch or stream):
+    * processing: **Batch**;
+    * workflow orchestration: **airflow**.
+* Data warehouse:
+    * cloud: **Redshift**;
+    * patitionning: Redshift does not support partitions but its optimized with sort keys
+* Transformation:
+    * technology used: **AWS EMR (PySpark)**;
+    * scheduling: **airflow**.
+* Dashboard:
+    * Technology: **AWS Quicksight**;
+    * number of tiles: **4**
 
 ## Running the Project
 ### 1. Requirements
@@ -113,7 +115,7 @@ cp .env.example .env
 AIRFLOW_CONN_AWS_DEFAULT="aws://YOUR_ACCESS_KEY:YOUR_SECRET_KEY@"
 AWS_DEFAULT_REGION="us-east-1"
 S3_BUCKET=your-bucket-name
-
+AIRFLOW_CONN_REDSHIFT_DEFAULT='redshift+psycopg2://user:password@cluster-domain:5439/database'
 
 3. Start Airflow:
 ```bash
@@ -123,23 +125,22 @@ docker-compose up -d
 
 ### 6. Run the Airflow DAGs
 1. Access Airflow UI at `http://localhost:8080`
-2. Enable and run DAGs in sequence:
-   - `proc_0_ingestion_to_s3_dag`
-   - Wait for completion
-   - `proc_1_spark_emr_dag`
-   - Wait for completion
-   - Final data loading to Redshift
+2. Enable and run DAG:`etl_dag`
+     
+Example of a successful DAG run:
+![DAG Run Example](/images/success_run.png "Successful DAG Execution")
 
+
+### 7. Visualize the data
+1. Connect to the Redshift database with AWS Quicksight
+2. Create graphics
+     
 Example successful DAG run:
-![DAG Run Example](/images/dag-run-example.png "Successful DAG Execution")
 
 ## Project Limitations
-- Manual DAG triggering required
-- Specific to Peru violence cases data structure
-- Requires public Redshift access (can be modified for production)
 
-## Contributing
-[Your contribution guidelines]
+- Specific to Peru violence cases data structure
+
 
 ## License
 [Your license information]
