@@ -21,7 +21,9 @@ This project demonstrates a batch processing pipeline for violence cases data in
 
 This project aims to process and analyze violence cases data reported in Peru. We build a data pipeline that collects data from source files, applies transformations using Spark, and loads it into a data warehouse for analysis.
 
-![Technologies](/images/technologies.png "Technologies used")
+The following diagram illustrates the high-level structure of the pipeline:
+
+![The ELT Pipeline](/images/pipeline-architecture.png "Data Pipeline Architecture")
 
 ## The Goal
 The end goal is to process violence cases data on the AWS platform and derive useful insights. Some key questions we can answer:
@@ -39,15 +41,15 @@ We process violence cases data that includes:
    - Demographic information (Gender, Age groups)
    - Temporal information (Year, Period)
 
- This information has been extracted from: [Perú Government data](https://www.datosabiertos.gob.pe/dataset/mimp-n%C3%BAmero-de-casos-atendidos-por-violencia-contra-la-mujer-integrantes-del-grupo-familiar) 
- However, since it is not easily accessible, there were some previous transformations of the data later hosted in a repo: [Perú Government data - Github by year](https://github.com/ccppyos/data_fem)
- Here the data has been separated in years since they update it yearly.  
-   
-
-## Architecture
-
-![Architecture](/images/fem_arc.png "ETL architecture of project")
-
+## Tools
+1. **Terraform**: Infrastructure as Code for AWS resources
+2. **Apache Airflow**: Workflow orchestration
+3. **AWS S3**: Data Lake storage
+4. **Apache Spark**: Data transformation
+5. **AWS EMR**: Managed Spark cluster
+6. **AWS Redshift**: Data Warehouse
+7. **AWS Quicksight**: Data Visualization
+8. **Docker**: Containerization for local development
 ## Detailed stack
 * Cloud:
     * platform: AWS (**Redshift** and **EMR**);
@@ -92,6 +94,9 @@ cd <project-directory>
    - Make it publicly accessible
    - Attach `etl_access` role
 
+3. Create the schema that is located on the folder scripts_bd
+
+
 ### 4. Create the Data Warehouse
 Create the required tables in Redshift using the provided schema:
 ```sql
@@ -132,14 +137,9 @@ Example of a successful DAG run:
 1. Connect to the Redshift database with AWS Quicksight
 2. Create graphics
      
+Example successful DAG run:
 
 ## Project Limitations
 
-- Specific to Peru violence cases data structure
+- The data provided by goverment is limited and does not have a defined that of ingestion. That's why we ask for it on a monthly basis.
 
-
-## License
-[Your license information]
-
----
-**Note**: Replace placeholder images, repository URLs, and customize sections according to your specific implementation.
