@@ -99,32 +99,6 @@ def get_file_link(exec_date, **kwargs):
       replace=True
    )
 
-def copy_to_redshift(s3_path, **kwargs):
-    copy_command = f"""
-    aws redshift-data execute-statement \
-    --cluster-identifier redshift-cluster-0 \
-    --database dev \
-    --db-user redshifu \
-    --sql "COPY reported_cases_peru FROM '{s3_path}' \
-    IAM_ROLE 'arn:aws:iam::'{USER_NUMBER}':role/etl_access' \
-    FORMAT AS PARQUET;"
-    """
-    
-    try:
-        result = subprocess.run(
-            copy_command,
-            shell=True,
-            check=True,
-            capture_output=True,
-            text=True
-        )
-        print(f"Command output: {result.stdout}")
-        return result.stdout
-    except subprocess.CalledProcessError as e:
-        print(f"Error executing command: {e.stderr}")
-        raise e
-
-
 default_args = {
     "owner": "airflow",
     "start_date": datetime(2023, 1, 1),
@@ -189,10 +163,10 @@ with DAG(
         database='dev',
         cluster_identifier='redshift-cluster-0',
         db_user='redshifu',
-        sql="""
+        sql=f"""
             COPY public.reported_cases_peru 
             FROM 's3://data-camp-bucket-crp/landing/data_cleaned_{{ execution_date.strftime('%Y') }}/part-*'
-            IAM_ROLE 'arn:aws:iam::881940342453:role/etl_access'
+            IAM_ROLE 'arn:aws:iam::'{USER_NUMBER}':role/etl_access' \
             FORMAT AS PARQUET;
         """,
         poll_interval=10,     
