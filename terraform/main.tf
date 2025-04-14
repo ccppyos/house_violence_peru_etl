@@ -29,6 +29,6 @@ resource "aws_redshift_cluster" "de-redshift" {
   master_password     = var.db_credentials_pwd
   node_type           = var.node_type
   cluster_type        = var.cluster_type
-  publicly_accessible = false
+  publicly_accessible = true
   skip_final_snapshot = true
 }
