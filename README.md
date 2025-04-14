@@ -27,9 +27,9 @@ This project aims to process and analyze violence cases data reported in Peru. W
 ## The Goal
 The end goal is to process violence cases data on the AWS platform and derive useful insights. Some key questions we can answer:
 
-- What is the distribution of violence types across regions?
-- How do violence cases vary by gender and age groups?
+- What is the distribution of violence types across years?
 - Which regions have the highest reported cases?
+- What's the number of actions taken by the goverment vs reported cases?
 
 ## The Dataset
 We process violence cases data that includes:
@@ -139,7 +139,26 @@ Example of a successful DAG run:
      
 ![Final dashboard](/images/dashboard.png "Final dashboard")
 
+Regarding the initial questions:
 
+- What is the distribution of violence types over the years?
+
+  There is a noticeable trend of increasing psychological and physical violence, which reached its peak during the pandemic. Over the past five years, the number of cases has remained consistent. This suggests a correlation between these two types of violence, as they often occur together.
+
+ ![first_question](/images/first_question.png "First question")
+
+
+- Which regions have the highest reported cases?
+
+  The capital has the highest number of reported cases, which is understandable given that it accounts for 30% of the population. However, in less densely populated areas, there is a noticeable trend in departments like CUSCO, JUNÍN, and ANCASH, which include most of the major cities in the Sierra region of Peru.
+
+ ![second_question](/images/second_question.png "Second question")
+
+- What is the number of actions taken by the government compared to reported cases?
+
+![third_question](/images/thirds_question.png "Third question")
+
+ There has been a response from the government. However, the number of reported cases continues to rise, indicating that the actions taken have not been effective.
 
 ## Project Limitations
 
