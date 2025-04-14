@@ -25,6 +25,8 @@ import pandas as pd
 path_to_local_home = os.environ.get("AIRFLOW_HOME", "/opt/airflow/")
 S3_BUCKET = os.environ.get("S3_BUCKET", "s3_no_bucket")
 S3_DESTINATION= 'raw'
+USER_NUMBER= os.environ.get("USER_NUMBER", "1")
+
 year = "{{ ds[:4] }}"
 file_link_template= f"https://raw.githubusercontent.com/ccppyos/data_fem/refs/heads/main/casos_fem_{year}.csv"
 s3_script = "utils/scripts/"
@@ -104,7 +106,7 @@ def copy_to_redshift(s3_path, **kwargs):
     --database dev \
     --db-user redshifu \
     --sql "COPY reported_cases_peru FROM '{s3_path}' \
-    IAM_ROLE 'arn:aws:iam::881940342453:role/etl_access' \
+    IAM_ROLE 'arn:aws:iam::'{USER_NUMBER}':role/etl_access' \
     FORMAT AS PARQUET;"
     """
     
@@ -182,15 +184,6 @@ with DAG(
         aws_conn_id='aws_default'
     )
 
-    # load_task = PythonOperator(
-    #     task_id='transfer_data_cleaned_s3_to_redshift',
-    #     python_callable=copy_to_redshift,
-    #     op_kwargs={
-    #         's3_path': 's3://data-camp-bucket-crp/landing/data_cleaned.parquet/part-00000-ab46f1ce-03eb-4032-961a-bf4131d07ec7-c000.snappy.parquet'
-    #     },
-    #     dag=dag,
-    # )
-
     copy_command = RedshiftDataOperator(
         task_id='copy_data_to_redshift',
         database='dev',
@@ -202,6 +195,7 @@ with DAG(
             IAM_ROLE 'arn:aws:iam::881940342453:role/etl_access'
             FORMAT AS PARQUET;
         """,
+        poll_interval=10,     
         aws_conn_id='aws_default',
         region='us-east-1',
         dag=dag
@@ -215,4 +209,3 @@ with DAG(
     
     
     begin_task >> download_csv_file >>  cluster_creator >> step_adder >> step_checker >> cluster_remover >> copy_command>> finish_task
-    #begin_task >> copy_command >> finish_task

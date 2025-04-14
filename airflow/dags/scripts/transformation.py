@@ -246,5 +246,5 @@ name_num_list = [column for column in df.columns if column.startswith("num_") an
 for column in name_num_list:
     df = df.withColumn(column,when(col(column).isNull(), 0).otherwise(col(column)))
 
-df.write.mode("overwrite").parquet(f"s3://data-camp-bucket-crp/landing/data_cleaned_{args.year}")
-df.write.csv(f"s3://data-camp-bucket-crp/landing/data_cleaned_{args.year}.csv", header=True, mode="overwrite")
+df.write.mode("overwrite").parquet(f"s3://data-camp-bucket-crp/landing/data_cleaned_{args.year}/")
+df.write.csv(f"s3://data-camp-bucket-crp/landing/data_cleaned_{args.year}/", header=True, mode="overwrite")
