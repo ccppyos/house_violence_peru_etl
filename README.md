@@ -43,7 +43,7 @@ We process violence cases data that includes:
 
   This information has been extracted from: [Perú Government data](https://www.datosabiertos.gob.pe/dataset/mimp-n%C3%BAmero-de-casos-atendidos-por-violencia-contra-la-mujer-integrantes-del-grupo-familiar) 
   However, since it is not easily accessible, there were some previous transformations of the data later hosted in a repo: [Perú Government data - Github by year](https://github.com/ccppyos/data_fem)
-  Here the data has been separated in years since they update it yearly.  
+  Here the data has been separated in years since they update it yearly and the code used for the transformation.
     
  
  ## Architecture
@@ -65,7 +65,7 @@ We process violence cases data that includes:
     * scheduling: **airflow**.
 * Dashboard:
     * Technology: **AWS Quicksight**;
-    * number of tiles: **4**
+    * number of tiles: **3**
 
 ## Running the Project
 ### 1. Requirements
