@@ -96,7 +96,7 @@ docker-compose down
 
 ### Pipeline Flow
 
-![Airflow steps](/images/etl_airflow.png "Data Pipeline Airflow")
+![Airflow steps](../images/etl_airflow.png "Data Pipeline Airflow")
 
 1. Data Ingestion (`etl_dag.py`):
    - Downloads violence cases data for specified year in CSV
