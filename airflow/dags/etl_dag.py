@@ -75,8 +75,8 @@ JOB_FLOW_OVERRIDES = {
         'TerminationProtected': False,
     },
     'Steps': SPARK_STEPS,
-    'JobFlowRole': 'EMR_EC2_DefaultRole',
-    'ServiceRole': 'EMR_DefaultRole',
+    'JobFlowRole': 'EMR_EC2_DefaultRole', #we have to create this role
+    'ServiceRole': 'EMR_DefaultRole', #we have to create this role
 }
 
 
@@ -108,8 +108,8 @@ default_args = {
 
 with DAG(
     dag_id="etl_process_fem",
-    schedule_interval="0 0 1 * *",  # run this dag every Tuesday at 11:55pm
-    max_active_runs=3,
+    schedule_interval="0 0 1 * *",  # cron for every month
+    max_active_runs=1,
     catchup=False,
     tags=['s3', 'aws', 'ingestion', 'cycling'],
     default_args=default_args
