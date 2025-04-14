@@ -1,18 +1,3 @@
-# resource "aws_instance" "de-ec2" {
-#   ami           = var.ec2_ami
-#   instance_type = "t2.micro"
-
-#   ebs_block_device {
-#     device_name = "/dev/sda1"
-#     volume_size = 10
-#   }
-
-#   tags = {
-#     Name = "EC2forDEprojects"
-#   }
-
-# }
-
 resource "aws_s3_bucket" "de-s3" {
   bucket = var.s3_bucket_name
 

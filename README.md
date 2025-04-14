@@ -1,6 +1,8 @@
 # Violence Cases Data Processing on AWS
 This project demonstrates a batch processing pipeline for violence cases data in Peru using AWS services and open-source tools.
 
+![Stack](/images/structure.png "ETL architecture of project")
+
 ## Table of contents
 - [Overview](#overview)
 - [The Goal](#the-goal)
@@ -135,7 +137,9 @@ Example of a successful DAG run:
 1. Connect to the Redshift database with AWS Quicksight
 2. Create graphics
      
-Example successful DAG run:
+![Final dashboard](/images/dashboard.png "Final dashboard")
+
+
 
 ## Project Limitations
 
