@@ -1,5 +1,7 @@
+# Violence Cases Data Pipeline - Peru
+
 ## Running DAGS on Airflow
-In this project, we are using Airflow in a docker container.
+This project processes violence cases data in Peru using Airflow in a Docker container.
 
 ### Requirements
 In order to run Airflow and the pipeline in this project, you need to have:
@@ -8,13 +10,29 @@ In order to run Airflow and the pipeline in this project, you need to have:
 ```bash
 docker -v
 ``` 
-* [AWS Account](https://aws.amazon.com/account/) which has access to an [S3 bucket](https://aws.amazon.com/s3/)
-* An **AWS_ACCESS_KEY_ID** and an **AWS_SECRET_ACCESS_KEY** associated with the [AWS Account](https://aws.amazon.com/account/). 
+
+* [AWS Account](https://aws.amazon.com/account/) with access to:
+  - [S3 bucket](https://aws.amazon.com/s3/)
+  - EMR service
+  - Redshift cluster
+* AWS credentials (**AWS_ACCESS_KEY_ID** and **AWS_SECRET_ACCESS_KEY**)
 
 ### Set ENVIRONMENT VARIABLES
 Before building the airflow docker image, it is necessary to set ENVIRONMENT VARIABLES in a `.env` file.
 
-To do so, rename the `.env.example` file located in this directory to `.env` then add the correct values for your own environment.
+To do so, rename the `.env.example` file located in this directory to `.env` then add the correct values for your own environment:
+
+```bash
+# Custom
+AIRFLOW_CONN_AWS_DEFAULT="aws://<your-access-key>:<your-secret-key>@"
+AWS_DEFAULT_REGION="us-east-1"
+AWS_PROFILE=default
+S3_BUCKET=your-bucket-name
+USER_NUMBER=your-user-number
+
+# Redshift Connection
+AIRFLOW_CONN_REDSHIFT_DEFAULT='redshift+psycopg2://<user>:<password>@<your-cluster>.<region>.redshift.amazonaws.com:5439/dev'
+```
 
 The `AIRFLOW_UID` value can be obtained from the following command:
 ```bash
@@ -22,22 +40,33 @@ echo -e "AIRFLOW_UID=$(id -u)" > .env
 ```
 Then `AIRFLOW_GID` can be set to `0`.
 
+### Project Structure
+airflow/
+├── dags/
+│ ├── scripts/
+│ │ └── transformation.py # Spark transformation logic
+│ └── proc_0_ingestion_to_s3_dag.py # Main ETL pipeline
+├── Dockerfile
+├── docker-compose.yaml
+├── requirements.txt
+└── .env.example
+
+The transformation.py must be uploaded on S3. The general bucket structure used is the following:
+
+![S3 Structure](/images/s3_structure.png "S3 Structure")
+
+- Emr requires a folder for its loggings 
+
+
 ### Dockerfile and docker-compose.yaml
-In DOckerfile, we download several packages such as: 
-1. [firefox esr](https://www.mozilla.org/en-US/firefox/enterprise/) for web scraping
+The Dockerfile includes essential packages:
+1. AWS CLI for AWS service interaction
+2. Required Python packages:
+   - apache-airflow-providers-amazon
+   - pandas
+   - bs4
 
-2. [selenium](https://pypi.org/project/selenium/) for web scraping
-
-3. [webdriver_manager](https://pypi.org/project/webdriver-manager/)  for web scraping
-
-4. [apache-airflow-providers-amazon](https://airflow.apache.org/docs/apache-airflow-providers-amazon/stable/index.html) to communicate and work with AWS
-
-5. [pyarrow](https://pypi.org/project/pyarrow/) to convert `.csv` to `.parquet` files
-
-6. [bs4](https://pypi.org/project/beautifulsoup4/) for web scraping
-
-Also, the `docker-compose.yaml` is a modified version of the original [docker-compose.yaml](https://airflow.apache.org/docs/apache-airflow/stable/docker-compose.yaml).
-
+The `docker-compose.yaml` is configured for local Airflow deployment.
 
 ### Run Airflow
 
@@ -55,7 +84,7 @@ This command should terminate with `exit code 0` if everything went well.
 
 3. Launch Airflow
 ```bash
-docker-compose up
+docker-compose up -d
 ```
 
 4. Visit [http://localhost:8080](http://localhost:8080) to access the Airflow GUI.
@@ -65,11 +94,28 @@ docker-compose up
 docker-compose down
 ```
 
+### Pipeline Flow
+
+![Airflow steps](/images/etl_airflow.png "Data Pipeline Airflow")
+
+1. Data Ingestion (`etl_dag.py`):
+   - Downloads violence cases data for specified year in CSV
+   - Stores raw data in S3 bucket
+   - Triggers EMR cluster for transformation
+
+2. Data Transformation (`transformation.py`):
+   - Cleans and standardizes data
+   - Processes violence cases information
+   - Outputs Parquet files to S3
+
+3. Data Loading:
+   - Loads transformed data to Redshift
+   - Creates final analytics tables
+
 ### Note: 
-It is highly recommended to manually trigger the `web_scraping_dag` prior to enabling the `s3_ingestion_dag`. 
-
-In order to do this, open the `web_scraping_dag` on Airflow and click on the **Play** button on the right, then select **Trigger Dags now**. All the scraping tasks must be completed before starting the ingestion with the other DAG.
-
-
-
-
+- The pipeline processes data year by year
+- EMR clusters are automatically terminated after use
+- Make sure to configure AWS services properly:
+  * S3 bucket permissions
+  * EMR roles and permissions
+  * Redshift cluster access
