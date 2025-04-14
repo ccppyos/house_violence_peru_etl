@@ -100,9 +100,56 @@ cd <project-directory>
 ### 4. Create the Data Warehouse
 Create the required tables in Redshift using the provided schema:
 ```sql
-CREATE TABLE reported_cases_peru (
-    -- Schema will be provided in separate SQL file
-);
+CREATE TABLE public.reported_cases_peru (
+  anho INTEGER,
+  periodo VARCHAR(255),
+  fecha_envio DATE,
+  ubigeo INTEGER,
+  departamento VARCHAR(255),
+  provincia VARCHAR(255),
+  distrito VARCHAR(255),
+  codigo_centro_atencion VARCHAR(255),
+  nombre_centro_atencion VARCHAR(255),
+  num_casos_atendidos_total INTEGER,
+  num_casos_atendidos_hombres_total INTEGER,
+  num_casos_atendidos_mujeres_total INTEGER,
+  num_casos_atendidos_violencia_psicologica INTEGER,
+  num_casos_atendidos_violencia_fisica INTEGER,
+  num_casos_atendidos_violencia_sexual INTEGER,
+  num_casos_atendidos_violencia_economica_o_patrimonial INTEGER,
+  num_casos_atendidos_0_5_total INTEGER,
+  num_casos_atendidos_0_5_hombres INTEGER,
+  num_casos_atendidos_0_5_mujeres INTEGER,
+  num_casos_atendidos_6_11_total INTEGER,
+  num_casos_atendidos_6_11_hombres INTEGER,
+  num_casos_atendidos_6_11_mujeres INTEGER,
+  num_casos_atendidos_12_17_total INTEGER,
+  num_casos_atendidos_12_17_hombres INTEGER,
+  num_casos_atendidos_12_17_mujeres INTEGER,
+  num_casos_atendidos_18_25_total INTEGER,
+  num_casos_atendidos_18_25_hombres INTEGER,
+  num_casos_atendidos_18_25_mujeres INTEGER,
+  num_casos_atendidos_18_29_total INTEGER,
+  num_casos_atendidos_18_29_hombres INTEGER,
+  num_casos_atendidos_18_29_mujeres INTEGER,
+  num_casos_atendidos_26_35_total INTEGER,
+  num_casos_atendidos_26_35_hombres INTEGER,
+  num_casos_atendidos_26_35_mujeres INTEGER,
+  num_casos_atendidos_36_45_total INTEGER,
+  num_casos_atendidos_36_45_hombres INTEGER,
+  num_casos_atendidos_36_45_mujeres INTEGER,
+  num_casos_atendidos_30_59_total INTEGER,
+  num_casos_atendidos_30_59_hombres INTEGER,
+  num_casos_atendidos_30_59_mujeres INTEGER,
+  num_casos_atendidos_46_59_total INTEGER,
+  num_casos_atendidos_46_59_hombres INTEGER,
+  num_casos_atendidos_46_59_mujeres INTEGER,
+  num_casos_atendidos_60_mas_total INTEGER,
+  num_casos_atendidos_60_mas_hombres INTEGER,
+  num_casos_atendidos_60_mas_mujeres INTEGER,
+  num_de_actividades_total INTEGER
+)
+SORTKEY (anho);
 ```
 
 ### 5. Run Airflow
