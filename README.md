@@ -5,9 +5,8 @@ This project demonstrates a batch processing pipeline for violence cases data in
 - [Overview](#overview)
 - [The Goal](#the-goal)
 - [The Dataset](#the-dataset)
-- [Data Modeling](#data-modeling)
-- [Tools](#tools)
-- [Scalability](#scalability)
+- [Architecture](#architecture)
+- [Detailed stack](#detailed-stack)
 - [Running the Project](#running-the-project)
   * [1. Requirements](#1-requirements)
   * [2. Clone the Repository](#2-clone-the-repository)
@@ -22,9 +21,7 @@ This project demonstrates a batch processing pipeline for violence cases data in
 
 This project aims to process and analyze violence cases data reported in Peru. We build a data pipeline that collects data from source files, applies transformations using Spark, and loads it into a data warehouse for analysis.
 
-The following diagram illustrates the high-level structure of the pipeline:
-
-![The ELT Pipeline](/images/pipeline-architecture.png "Data Pipeline Architecture")
+![Technologies](/images/technologies.png "Technologies used")
 
 ## The Goal
 The end goal is to process violence cases data on the AWS platform and derive useful insights. Some key questions we can answer:
@@ -42,15 +39,15 @@ We process violence cases data that includes:
    - Demographic information (Gender, Age groups)
    - Temporal information (Year, Period)
 
-## Tools
-1. **Terraform**: Infrastructure as Code for AWS resources
-2. **Apache Airflow**: Workflow orchestration
-3. **AWS S3**: Data Lake storage
-4. **Apache Spark**: Data transformation
-5. **AWS EMR**: Managed Spark cluster
-6. **AWS Redshift**: Data Warehouse
-7. **AWS Quicksight**: Data Visualization
-8. **Docker**: Containerization for local development
+ This information has been extracted from: [Perú Government data](https://www.datosabiertos.gob.pe/dataset/mimp-n%C3%BAmero-de-casos-atendidos-por-violencia-contra-la-mujer-integrantes-del-grupo-familiar) 
+ However, since it is not easily accessible, there were some previous transformations of the data later hosted in a repo: [Perú Government data - Github by year](https://github.com/ccppyos/data_fem)
+ Here the data has been separated in years since they update it yearly.  
+   
+
+## Architecture
+
+![Architecture](/images/fem_arc.png "ETL architecture of project")
+
 ## Detailed stack
 * Cloud:
     * platform: AWS (**Redshift** and **EMR**);
@@ -135,7 +132,6 @@ Example of a successful DAG run:
 1. Connect to the Redshift database with AWS Quicksight
 2. Create graphics
      
-Example successful DAG run:
 
 ## Project Limitations
 
